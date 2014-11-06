@@ -1,0 +1,87 @@
+###################################
+############## HTTPS ##############
+###################################
+
+server {
+
+  listen          0.0.0.0:443;
+  ssl         on;
+  server_name     *.runtastic.com runtastic.com;
+  access_log /var/log/nginx/ssl-access.log;
+  access_log off;
+  error_log /var/log/nginx/ssl-error.log;
+  ssl_certificate      /etc/ssl/certs/runtastic.com-chain.crt;
+  ssl_certificate_key  /etc/ssl/certs/runtastic.com.key.pem;
+  ssl_protocols        TLSv1 TLSv1.1 TLSv1.2;
+  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+  keepalive_timeout    600;
+  ssl_session_cache    shared:SSL:200m;
+  ssl_session_timeout  10m;
+  proxy_buffer_size   128k;
+  proxy_buffers   8 128k;
+  proxy_busy_buffers_size   128k;
+
+
+#+++++++++++++++
+#++ Redirects ++
+#+++++++++++++++
+  if ($http_host = "maps.runtastic.com") {
+    rewrite ^/(.*)$ https://www.runtastic.com/$1;
+  }
+
+  #Shop
+  if ($http_host = "shop.runtastic.com") {
+    rewrite ^/(.*)$ https://www.runtastic.com/shop/$1;
+  }
+  if ($http_host = "mein.shop.runtastic.com") {
+    rewrite ^/(.*)$ https://www.runtastic.com/shop/$1;
+  }
+  if ($http_host = "my.shop.runtastic.com") {
+    rewrite ^/(.*)$ https://www.runtastic.com/shop/$1;
+  }
+  if ($http_host = "test-shop.runtastic.com") {
+    rewrite ^/(.*)$ https://www.runtastic.com/test-shop/$1;
+  }
+
+  if ($http_host != "www.runtastic.com") {
+    rewrite ^/(.*)$ https://www.runtastic.com/$1;
+  }
+
+  location /shop {
+    proxy_pass <%=@shop_backend_url%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+
+  location ~* /shop/([^/]+)/(run_admin_run|admin/run_admin_run) {
+    proxy_pass <%=@shop_management_url%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+
+  location /test-shop {
+    proxy_pass <%=@testshop_backend_url%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+
+  location /mpay-shop {
+    proxy_pass <%=@shop_mpay_backend_url%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+
+  location /_files {
+    proxy_pass <%=@files_backend_url%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+
+  location / {
+    proxy_pass http://<%=@cluster_ip%>:<%=@cluster_port%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+}
+

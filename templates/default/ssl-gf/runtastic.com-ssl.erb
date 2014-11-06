@@ -1,0 +1,27 @@
+###################################
+############## HTTPS ##############
+###################################
+
+server {
+
+  listen          0.0.0.0:443;
+  ssl         on;
+  server_name     <%=@site%> <%=@alias%>;
+  access_log /var/log/nginx/ssl-access.log;
+  access_log off;
+  error_log /var/log/nginx/ssl-error.log;
+  ssl_certificate      /etc/ssl/certs/runtastic.com-chain.crt;
+  ssl_certificate_key  /etc/ssl/certs/runtastic.com.key.pem;
+  ssl_protocols        TLSv1 TLSv1.1 TLSv1.2;
+  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+  keepalive_timeout    600;
+  ssl_session_cache    shared:SSL:200m;
+  ssl_session_timeout  10m;
+
+  location / {
+    proxy_pass http://<%=@cluster_ip%>:<%=@cluster_port%>; # my existing apache instance
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+}

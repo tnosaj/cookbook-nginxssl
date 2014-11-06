@@ -1,0 +1,62 @@
+#####################################
+################# HTTP ##############
+#####################################
+
+
+server {
+  listen          0.0.0.0:80;
+	client_max_body_size 10M;
+  server_name     *.runtastic.com runtastic.com;
+  #access_log /var/log/nginx/ssl-access.log;
+  access_log off;
+  error_log /var/log/nginx/ssl-error.log;
+  keepalive_timeout    60;
+
+#### Enable to redirect all Traffic to SSL
+	if ($http_host = "www.runtastic.com") { 
+	    rewrite ^/(.*)$ https://www.runtastic.com/$1;
+	}
+
+  if ($http_host = "runtastic.com") {
+      rewrite ^/(.*)$ https://www.runtastic.com/$1;
+  }
+
+
+#+++++++++++++++
+#++ Redirects ++
+#+++++++++++++++
+
+	if ($http_host = "maps.runtastic.com") {
+	    rewrite ^/(.*)$ http://www.runtastic.com/$1;
+	}
+	#Shop
+	if ($http_host = "shop.runtastic.com") {
+	    rewrite ^/(.*)$ https://www.runtastic.com/shop/$1;
+	}
+	if ($http_host = "mein.shop.runtastic.com") {
+	    rewrite ^/(.*)$ https://www.runtastic.com/shop/$1;
+	}
+	if ($http_host = "my.shop.runtastic.com") {
+	    rewrite ^/(.*)$ https://www.runtastic.com/shop/$1;
+	}
+	if ($http_host = "test-shop.runtastic.com") {
+	    rewrite ^/(.*)$ https://www.runtastic.com/test-shop/$1;
+	}
+
+	location /nginx_status {
+		stub_status on;
+		access_log off;
+		allow 86.56.158.165;
+		deny all;
+	}
+
+	location ^~ /shop/ {
+		rewrite ^ https://www.runtastic.com$request_uri? permanent;
+	}
+
+  location / {
+    proxy_pass http://<%=@cluster_ip%>:<%=@cluster_port%>; 
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+}
