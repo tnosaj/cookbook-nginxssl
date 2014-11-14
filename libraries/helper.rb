@@ -6,11 +6,13 @@ module Rtnginx
         #
         # Symlink and notify service
         #
+        return true
       end
       def disable(site)
         #
         # Unlink and notify service
         #
+        return true
       end
     end
   end
