@@ -15,7 +15,7 @@ suites:
     environments_path: ~/chef/rtvipr-chef-metadata/environments
     nodes_path: ~/chef/rtvipr-chef-metadata/nodes
     run_list:
-      - recipe[rtnginx-ssl]
+      - recipe[rtnginxssl]
     attributes: {}
 
   - name: gf-ssl

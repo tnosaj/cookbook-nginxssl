@@ -1,4 +1,4 @@
-name             'rtnginx-ssl'
+name             'rtnginxssl'
 maintainer       'Runtastic GmbH'
 maintainer_email 'ops@runtastic.com'
 license          'Apache 2.0'

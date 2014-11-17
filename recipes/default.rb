@@ -6,4 +6,4 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe "rtnginx-ssl::configure"
+include_recipe "rtnginxssl::configure"
