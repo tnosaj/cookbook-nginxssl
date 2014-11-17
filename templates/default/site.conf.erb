@@ -1,0 +1,36 @@
+server {
+  listen          0.0.0.0:80;
+  client_max_body_size 10M;
+  server_name     *.runtastic.com runtastic.com;
+  access_log off;
+  access_log /var/log/nginx/access-<%= %>-.log;
+  error_log /var/log/nginx/error-<%= %>-.log;
+  keepalive_timeout    60;
+
+#### Enable to redirect all Traffic to SSL
+  if ($http_host = "www.runtastic.com") {
+      rewrite ^/(.*)$ https://www.runtastic.com/$1;
+  }
+
+  if ($http_host = "runtastic.com") {
+      rewrite ^/(.*)$ https://www.runtastic.com/$1;
+  }
+
+#+++++++++++++++
+#++ Redirects ++
+#+++++++++++++++
+
+  if ($http_host = "maps.runtastic.com") {
+      rewrite ^/(.*)$ http://www.runtastic.com/$1;
+  }
+
+  location ^~ /shop/ {
+    rewrite ^ https://www.runtastic.com$request_uri? permanent;
+  }
+
+  location / {
+    proxy_pass http://<%=@cluster_ip%>:<%=@cluster_port%>;
+    proxy_set_header Host $host;
+    proxy_set_header x-forwarded-for $remote_addr;
+  }
+}

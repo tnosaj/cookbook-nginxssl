@@ -3,6 +3,7 @@ def whyrun_supported?
 end
 
 action :enable do
+  if 
   template "#{node['nginx']['sites_available']}/"+new_resource.name do
     if new_resource.onlyrewrite
       source 'rewrite_site.conf.erb'

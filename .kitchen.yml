@@ -15,8 +15,7 @@ suites:
     environments_path: ~/chef/rtvipr-chef-metadata/environments
     nodes_path: ~/chef/rtvipr-chef-metadata/nodes
     run_list:
-      - recipe[rtbase::update-cache-blocking]
-      - recipe[rtapp::web-server]
+      - recipe[rtnginx-ssl]
     attributes: {}
 
   - name: gf-ssl

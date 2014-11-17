@@ -14,11 +14,11 @@ attribute :domain,              :kind_of => String, :default => "runtastic.com"
 attribute :subdomain,           :kind_of => String, :default => :name_attribute
 attribute :url,                 :kind_of => String, :default => nil
 attribute :default_proxy_path,  :kind_of => String, :required => true
-attribute :template             :kind_of => String, :default => "site.conf.erb"
+attribute :template,            :kind_of => String, :default => "site.conf.erb"
 attribute :onlyrewrite,         :kind_of => [ TrueClass, FalseClass ], :default => false
 
 def location(iname, &block)
-  loc = Chef::Resource::NginxLocation.new("lxc_interface[#{self.name} - #{iname}]", nil)
+  loc = Chef::Resource::NginxLocation.new("rtnginx-ssl_location[#{self.name} - #{iname}]", nil)
   loc.path self.path
   loc.proxy self.proxy
   loc.options self.options
