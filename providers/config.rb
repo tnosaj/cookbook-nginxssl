@@ -9,7 +9,7 @@ end
 #  @current_resource = Chef::Resource::RtnginxSsl.new(new_resource.name)
 #  @current_resource
 #end
-
+use_inline_resources
 action :configure do
   Chef::Log.info "JAT - Configuring: "+new_resource.name
   t = template node['nginx']['config']['file'] do
@@ -21,7 +21,6 @@ action :configure do
     #variables({    })
   end
   new_resource.updated_by_last_action(t.updated_by_last_action?)
-  enable(new_resource.name)
 end
 
 action :test do
@@ -29,7 +28,6 @@ action :test do
     command "nginx -t"
   end
   new_resource.updated_by_last_action(true)
-  enable(new_resource.name)
 end
 
 action :reload do
@@ -40,6 +38,5 @@ action :reload do
     notifies :reload, resources(:service => "nginx"), :immediately
   end
   new_resource.updated_by_last_action(e.updated_by_last_action?)
-  enable(new_resource.name)
 end
 
