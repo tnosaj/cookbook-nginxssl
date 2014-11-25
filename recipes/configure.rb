@@ -8,6 +8,14 @@ rtnginxssl_config "myinstance" do
 end
 
 # Site disable default
+www_loc = {"default" => {"base" => "/", "options" => {"proxy_pass" => "http://123.123.123.123:80"}}}
+rtnginxssl_site "www" do
+  action :enable
+  subdomain "www"
+  servername ["www.runtastic.com","runtastic.com"]
+  locations www_loc
+  notifies :reload, "rtnginxssl_config[instance]", :immediately
+end
 
 logrotate_app "nginx" do
   cookbook  'logrotate'

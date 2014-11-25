@@ -5,3 +5,15 @@ default['nginx']['config']['sites_available'] = node['nginx']['config']['dir']+"
 default['nginx']['config']['sites_enabled'] = node['nginx']['config']['dir']+"sites-enabled/"
 default['nginx']['config']['pid'] = "/run/nginx.pid"
 default['nginx']['config']['logdir'] = "/var/log/nginx/"
+default['nginx']['server']['default'] = {   
+  "keepalive_timeout" => "60",
+  "access_log" => "off",
+  "client_max_body_size" => "10M"
+}
+default['nginx']['proxy']['default'] = {   
+  "proxy_set_header" => {
+    "Host" => "$host",
+    "x-forwarded-for" => "$remote_addr"
+  }
+}
+
