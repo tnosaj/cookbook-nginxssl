@@ -20,22 +20,32 @@ module Rtnginx
     module StringHelper
     include Chef::Mixin::ShellOut
       def parseOptions(opts)
+        rv = []
         case opts
         when Array
-          return opts.map { |opt| opt }.join(" ")
+          rv.push(opts.map { |opt| opt }.join(" "))
         when Hash
-          rv = []
           opts.each do |k,v|
-            rv.push! (k.merge!(parseOptions(v)))
+            Chef::Log.error " JASON: K -  #{k.to_s}"
+            newv = parseOptions(v)
+            Chef::Log.error " JASON: newv -  #{newv.to_s}"
+            case newv
+            when Array
+              rv.push(k+" "+newv.map { |opt| opt }.join(" "))
+            when String
+              rv.push(k+" "+newv)
+            end
+            Chef::Log.error " JASON: ARRAY:  -  #{rv.to_s}"
           end
-          return rv.sort!
         when String
-          return opts
+          rv.push(opts)
         else
-          Chef::Log.error "NOT SUPPORTED TYPE FOR: #{opts}"
           raise ArgumentError, "NOT SUPPORTED TYPE FOR: #{opts}"
-        end 
+        end
+        Chef::Log.error " JASON: RV -  #{rv.to_s}"
+        return rv
       end
+
       def mergeOptions(defaultopts,nodeopts,resourceopts)
         rv=defaultopts
         if !nodeopts.nil?
@@ -44,6 +54,7 @@ module Rtnginx
         if !resourceopts.nil?
           rv.merge!(resourceopts)
         end
+        Chef::Log.info " JAT - new rv = #{rv.to_s}"
         return rv
       end
     end

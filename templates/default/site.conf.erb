@@ -1,6 +1,6 @@
 <% ::Chef::Mixin::Template::TemplateContext.send(:include, Rtnginx::Ssl::StringHelper) %>
 server {
-  server_name     <%= parseOptions(@servername) %>;
+  server_name     <%= parseOptions(@servername).map { |opt| opt }.join(" ") %>;
   access_log /var/log/nginx/access-<%= @name%>-.log;
   error_log /var/log/nginx/error-<%= @name%>-.log;
   <% parseOptions(@serveroptions).each do |opt| %>
@@ -29,7 +29,7 @@ server {
   # <%= locname %>
   location <%= loc['base'] %> {
   <% parseOptions(loc['options']).each do |opt| %>
-  <%= opt %>;
+    <%= opt %>;
   <% end %>
   }
   <% end %>

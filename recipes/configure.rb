@@ -8,7 +8,18 @@ rtnginxssl_config "myinstance" do
 end
 
 # Site disable default
-www_loc = {"default" => {"base" => "/", "options" => {"proxy_pass" => "http://123.123.123.123:80"}}}
+www_loc = {
+  "default" => {
+    "base" => "/", 
+    "options" => {
+      "proxy_pass" => "http://123.123.123.123:80",
+      "proxy_set_header" => {
+        "Host" => "$host",
+        "x-forwarded-for" => "$remote_addr"
+      }
+    }
+  }
+}
 rtnginxssl_site "www" do
   action :enable
   subdomain "www"

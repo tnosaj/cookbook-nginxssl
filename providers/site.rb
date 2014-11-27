@@ -11,6 +11,7 @@ end
 #end
 use_inline_resources
 action :enable do
+  tmpservername = [ new_resource.subdomain+"."+new_resource.domain ]
   t = template node['nginx']['config']['sites_available']+new_resource.name do
     if new_resource.onlyrewrite
       source 'rewrite_site.conf.erb'
@@ -21,11 +22,7 @@ action :enable do
       :name => new_resource.name,
       :domain => new_resource.domain,
       :subdomain => new_resource.subdomain,
-      #if !new_resource.servername.nil?
-        :servername => new_resource.servername,
-      #else
-      #  :servername => [ new_resource.subdomain+"."+new_resource.domain ],
-      #end
+      :servername => new_resource.servername | tmpservername,
       :url => new_resource.url,
       :locations => new_resource.locations,
       :serveroptions =>  mergeOptions(node['nginx']['server']['default'], node['nginx']['server'][new_resource.name], new_resource.serveroptions)
