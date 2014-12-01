@@ -1,4 +1,4 @@
-<% ::Chef::Mixin::Template::TemplateContext.send(:include, Rtnginx::Ssl::StringHelper) %>
+<% ::Chef::Mixin::Template::TemplateContext.send(:include, Nginx::Ssl::StringHelper) %>
 server {
   server_name     <%= parseOptions(@servername).map { |opt| opt }.join(" ") %>;
   access_log /var/log/nginx/access-<%= @name%>-.log;
@@ -17,31 +17,37 @@ server {
       rewrite ^/(.*)$ https://www.runtastic.com/$1;
   }
 
-#+++++++++++++++
-#++ Redirects ++
-#+++++++++++++++
-
   if ($http_host = "maps.runtastic.com") {
       rewrite ^/(.*)$ http://www.runtastic.com/$1;
   }
 
-  <% @locations.sort.each do |locname,loc| %>
+  location ^~ /shop/ {
+    rewrite ^ https://www.runtastic.com$request_uri? permanent;
+  }
+
+#+++++++++++++++
+#++ Modifiers ++
+#+++++++++++++++
+  <% @modifiers.each do |modname,mod| %>
+  # <%= modname %>
+  if (<%= mod['query'] %>){
+  <% parseOptions(mod['options']).each do |opt| %>
+    <%= opt %>;
+  <% end %>
+  }
+  <% end %>
+
+#+++++++++++++++
+#++ Locations ++
+#+++++++++++++++
+  <% @locations.each do |locname,loc| %>
   # <%= locname %>
   location <%= loc['base'] %> {
   <% parseOptions(loc['options']).each do |opt| %>
     <%= opt %>;
   <% end %>
   }
+
   <% end %>
 
-
-  location ^~ /shop/ {
-    rewrite ^ https://www.runtastic.com$request_uri? permanent;
-  }
-
-  location / {
-    proxy_pass ;
-    proxy_set_header Host $host;
-    proxy_set_header x-forwarded-for $remote_addr;
-  }
 }

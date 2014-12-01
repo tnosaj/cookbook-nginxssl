@@ -2,7 +2,7 @@ def whyrun_supported?
   true
 end
 
-::Chef::Provider.send(:include, Rtnginx::Ssl::Helper)
+::Chef::Provider.send(:include, Nginx::Ssl::Helper)
 
 # ONLY NEEDED IF ITS NATIVE RUBY!
 #def load_current_resource

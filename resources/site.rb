@@ -21,6 +21,7 @@ attribute :servername,          :kind_of => Array, :default => nil
 attribute :url,                 :kind_of => String, :default => nil
 attribute :default_proxy_path,  :kind_of => String, :required => true
 attribute :locations,           :kind_of => Hash, :default => nil
+attribute :modifiers,           :kind_of => Hash, :default => nil
 attribute :serveroptions,       :kind_of => Hash, :default => nil
 attribute :listenaddr,          :kind_of => String, :default => "0.0.0.0"
 attribute :listenport,          :kind_of => String, :default => "443"

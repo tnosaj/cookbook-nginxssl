@@ -2,8 +2,8 @@ def whyrun_supported?
   true
 end
 
-::Chef::Provider.send(:include, Rtnginx::Ssl::Helper)
-::Chef::Provider.send(:include, Rtnginx::Ssl::StringHelper)
+::Chef::Provider.send(:include, Nginx::Ssl::Helper)
+::Chef::Provider.send(:include, Nginx::Ssl::StringHelper)
 # ONLY NEEDED IF ITS NATIVE RUBY!
 #def load_current_resource
 #  @current_resource = Chef::Resource::RtnginxSsl.new(new_resource.name)
@@ -25,6 +25,7 @@ action :enable do
       :servername => new_resource.servername | tmpservername,
       :url => new_resource.url,
       :locations => new_resource.locations,
+      :modifiers => new_resource.modifiers,
       :serveroptions =>  mergeOptions(node['nginx']['server']['default'], node['nginx']['server'][new_resource.name], new_resource.serveroptions)
     })
   end

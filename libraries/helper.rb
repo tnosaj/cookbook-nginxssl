@@ -1,4 +1,4 @@
-module Rtnginx
+module Nginx
   module Ssl
     module Helper
     include Chef::Mixin::ShellOut
@@ -26,16 +26,16 @@ module Rtnginx
           rv.push(opts.map { |opt| opt }.join(" "))
         when Hash
           opts.each do |k,v|
-            Chef::Log.error " JASON: K -  #{k.to_s}"
-            newv = parseOptions(v)
-            Chef::Log.error " JASON: newv -  #{newv.to_s}"
-            case newv
+            case v
             when Array
-              rv.push(k+" "+newv.map { |opt| opt }.join(" "))
+              rv.push(k+" "+v.map { |opt| opt }.join(" "))
+            when Hash
+              v.each do |kk,vv|
+                rv.push(k+" "+kk+" "+vv.to_s)
+              end
             when String
-              rv.push(k+" "+newv)
+              rv.push(k+" "+v)
             end
-            Chef::Log.error " JASON: ARRAY:  -  #{rv.to_s}"
           end
         when String
           rv.push(opts)

@@ -1,9 +1,9 @@
 #
-# Cookbook Name:: rtnginx-ssl
+# Cookbook Name:: nginx-ssl
 # Recipe:: default
 #
 # Copyright 2013, YOUR_COMPANY_NAME
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe "rtnginxssl::configure"
+include_recipe "nginxssl::configure"
