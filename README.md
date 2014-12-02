@@ -10,9 +10,23 @@ Attributes
 Usage
 =====
 
+Server Settings:
+node['nginx']['server']['default']
+node['nginx']['server'][new_resource.name]
+new_resource.serveroptions
 
 
 modifiers hash:
+  
+type => defaults to 'if'
+query => what should match
+options => what should happen
+
+  "rewrite www to https" => {
+    "type" => "if",
+    "query" => '$http_host = "www.runtastic.com"',
+    "options" => 'rewrite ^/(.*)$ https://www.runtastic.com/$1'
+  },
 
 
 

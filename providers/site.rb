@@ -2,7 +2,6 @@ def whyrun_supported?
   true
 end
 
-::Chef::Provider.send(:include, Nginx::Ssl::Helper)
 ::Chef::Provider.send(:include, Nginx::Ssl::StringHelper)
 # ONLY NEEDED IF ITS NATIVE RUBY!
 #def load_current_resource
@@ -23,27 +22,38 @@ action :enable do
       :domain => new_resource.domain,
       :subdomain => new_resource.subdomain,
       :servername => new_resource.servername | tmpservername,
+      #:listenaddr => new_resource.listenaddr,
+      #:listenport => new_resource.listenport,
+      :https => new_resource.https,
       :url => new_resource.url,
       :locations => new_resource.locations,
       :modifiers => new_resource.modifiers,
       :serveroptions =>  mergeOptions(node['nginx']['server']['default'], node['nginx']['server'][new_resource.name], new_resource.serveroptions)
     })
+    cookbook new_resource.cookbook
   end
-  new_resource.updated_by_last_action(t.updated_by_last_action?) 
-  enable(new_resource.name)
+  l = link node['nginx']['config']['sites_enabled']+new_resource.name do
+    to node['nginx']['config']['sites_available']+new_resource.name
+    not_if "test -L #{node['nginx']['config']['sites_enabled']+new_resource.name}"
+  end
+  new_resource.updated_by_last_action(t.updated_by_last_action? || l.updated_by_last_action?) 
 end
 
 action :disable do
-  disable(new_resource.name)
+  l = link node['nginx']['config']['sites_enabled']+new_resource.name do
+    action :delete
+    only_if "test -L #{node['nginx']['config']['sites_enabled']+new_resource.name}"
+  end
+  new_resource.updated_by_last_action(l.updated_by_last_action?) 
 end
 
 action :delete do
-  if disable(new_resource.name)
-    file ['nginx']['config']['sites_available']+new_resource.name do
-      action :delete
-    end
-    new_resource.updated_by_last_action(true)
-  else
-    Chef::Log.error "Could not disable #{new_resource.name}"
+  l = link node['nginx']['config']['sites_enabled']+new_resource.name do
+    action :delete
+    only_if "test -L #{node['nginx']['config']['sites_enabled']+new_resource.name}"
   end
+  f = file ['nginx']['config']['sites_available']+new_resource.name do
+    action :delete
+  end
+  new_resource.updated_by_last_action(l.updated_by_last_action? || f.updated_by_last_action?) 
 end

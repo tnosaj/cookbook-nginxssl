@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'rtnginx::default' do
+describe 'nginx::default' do
   subject { ChefSpec::Runner.new.converge(described_recipe) }
 
   # Write quick specs using `it` blocks with implied subjects

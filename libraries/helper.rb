@@ -1,22 +1,5 @@
 module Nginx
   module Ssl
-    module Helper
-    include Chef::Mixin::ShellOut
-      def enable(site)
-        Chef::Log.info "JAT - enable: "+site
-        #
-        # Symlink and notify service
-        #
-        return true
-      end
-      def disable(site)
-        Chef::Log.info "JAT - disable: "+site
-        #
-        # Unlink and notify service
-        #
-        return true
-      end
-    end
     module StringHelper
     include Chef::Mixin::ShellOut
       def parseOptions(opts)
@@ -42,7 +25,6 @@ module Nginx
         else
           raise ArgumentError, "NOT SUPPORTED TYPE FOR: #{opts}"
         end
-        Chef::Log.error " JASON: RV -  #{rv.to_s}"
         return rv
       end
 
@@ -54,7 +36,6 @@ module Nginx
         if !resourceopts.nil?
           rv.merge!(resourceopts)
         end
-        Chef::Log.info " JAT - new rv = #{rv.to_s}"
         return rv
       end
     end

@@ -1,5 +1,13 @@
 <% ::Chef::Mixin::Template::TemplateContext.send(:include, Nginx::Ssl::StringHelper) %>
 server {
+  <% if @https %>
+  listen  0.0.0.0:443;
+  <% parseOptions(node['nginx']['config']['ssl'][@domain]).each do |opt| %>
+  <%= opt %>;
+  <% end %>
+  <% else %>
+  listen  0.0.0.0:80;
+  <% end %>
   server_name     <%= parseOptions(@servername).map { |opt| opt }.join(" ") %>;
   access_log /var/log/nginx/access-<%= @name%>-.log;
   error_log /var/log/nginx/error-<%= @name%>-.log;
@@ -8,29 +16,12 @@ server {
   <% end %>
 
 
-#### Enable to redirect all Traffic to SSL
-  if ($http_host = "www.runtastic.com") {
-      rewrite ^/(.*)$ https://www.runtastic.com/$1;
-  }
-
-  if ($http_host = "runtastic.com") {
-      rewrite ^/(.*)$ https://www.runtastic.com/$1;
-  }
-
-  if ($http_host = "maps.runtastic.com") {
-      rewrite ^/(.*)$ http://www.runtastic.com/$1;
-  }
-
-  location ^~ /shop/ {
-    rewrite ^ https://www.runtastic.com$request_uri? permanent;
-  }
-
 #+++++++++++++++
 #++ Modifiers ++
 #+++++++++++++++
   <% @modifiers.each do |modname,mod| %>
   # <%= modname %>
-  if (<%= mod['query'] %>){
+  <%=  !mod['type'].nil? ? mod['type'] : 'if' %> (<%= mod['query'] %>){
   <% parseOptions(mod['options']).each do |opt| %>
     <%= opt %>;
   <% end %>

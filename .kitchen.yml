@@ -9,32 +9,11 @@ platforms:
   - name: ubuntu-12.04
 
 suites:
-  - name: web-ssl
+  - name: generic-ssl
     data_bags_path: ~/chef/rtvipr-chef-metadata/data_bags
     roles_path: ~/chef/rtvipr-chef-metadata/roles
     environments_path: ~/chef/rtvipr-chef-metadata/environments
     nodes_path: ~/chef/rtvipr-chef-metadata/nodes
     run_list:
-      - recipe[rtnginxssl::web-ssl]
+      - recipe[nginxssl::configure]
     attributes: {}
-
-  - name: gf-ssl
-    data_bags_path: ~/chef/rtvipr-chef-metadata/data_bags
-    roles_path: ~/chef/rtvipr-chef-metadata/roles
-    environments_path: ~/chef/rtvipr-chef-metadata/environments
-    nodes_path: ~/chef/rtvipr-chef-metadata/nodes
-    run_list:
-      - recipe[rtbase::update-cache-blocking]
-      - recipe[rtapp::web-worker]
-    attributes: {}
-
-  - name: service-ssl
-    data_bags_path: ~/chef/rtvipr-chef-metadata/data_bags
-    roles_path: ~/chef/rtvipr-chef-metadata/roles
-    environments_path: ~/chef/rtvipr-chef-metadata/environments
-    nodes_path: ~/chef/rtvipr-chef-metadata/nodes
-    run_list:
-      - recipe[rtbase::update-cache-blocking]
-      - recipe[rtapp::web-worker]
-    attributes: {}
-

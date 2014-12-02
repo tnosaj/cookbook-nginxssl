@@ -5,15 +5,16 @@ default['nginx']['config']['sites_available'] = node['nginx']['config']['dir']+"
 default['nginx']['config']['sites_enabled'] = node['nginx']['config']['dir']+"sites-enabled/"
 default['nginx']['config']['pid'] = "/run/nginx.pid"
 default['nginx']['config']['logdir'] = "/var/log/nginx/"
+default['nginx']['config']['ssl']['runtastic.com'] = {
+  "ssl_certificate" => "/etc/ssl/certs/runtastic.com-chain.crt",
+  "ssl_certificate_key" => "/etc/ssl/certs/runtastic.com.key.pem",
+  "ssl_protocols" => "TLSv1 TLSv1.1 TLSv1.2",
+  "ssl_ciphers" => "RC4:HIGH:!aNULL:!MD5",
+  "ssl_prefer_server_ciphers" => "on"
+}
+
 default['nginx']['server']['default'] = {   
   "keepalive_timeout" => "60",
   "access_log" => "off",
   "client_max_body_size" => "10M"
 }
-default['nginx']['proxy']['default'] = {   
-  "proxy_set_header" => {
-    "Host" => "$host",
-    "x-forwarded-for" => "$remote_addr"
-  }
-}
-
