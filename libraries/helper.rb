@@ -9,15 +9,8 @@ module Nginx
           rv.push(opts.map { |opt| opt }.join(" "))
         when Hash
           opts.each do |k,v|
-            case v
-            when Array
-              rv.push(k+" "+v.map { |opt| opt }.join(" "))
-            when Hash
-              v.each do |kk,vv|
-                rv.push(k+" "+kk+" "+vv.to_s)
-              end
-            when String
-              rv.push(k+" "+v)
+            parseOptions(v).each do |opt|
+              rv.push(k+" "+opt)
             end
           end
         when String

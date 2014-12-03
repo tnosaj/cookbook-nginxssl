@@ -4,7 +4,7 @@ nginxssl_config "instance"
 
 nginxssl_config "myinstance" do
   action :configure
-  notifies :reload, "nginxssl_config[instance]", :delayed
+  notifies :reload, "nginxssl_config[instance]", :immediately
 end
 
 logrotate_app "nginx" do
