@@ -15,5 +15,5 @@ suites:
     environments_path: ~/chef/rtvipr-chef-metadata/environments
     nodes_path: ~/chef/rtvipr-chef-metadata/nodes
     run_list:
-      - recipe[nginxssl::configure]
+      - recipe[nginxssl::test_kitchen]
     attributes: {}

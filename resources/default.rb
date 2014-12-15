@@ -3,8 +3,9 @@ def initialize(*args)
   super
 end
 
-actions :configure, :test, :reload
+actions :configure, :test, :reload, :install
 default_action :nothing
 
 attribute :name,      :kind_of => String, :name_attribute => true
 attribute :template,  :kind_of => String, :default => nil
+attribute :cookbook,  :kind_of  => String, :default => "nginxssl"

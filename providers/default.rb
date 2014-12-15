@@ -10,6 +10,7 @@ end
 #end
 use_inline_resources
 action :configure do
+  nginxssl "instance"
   Chef::Log.info "JAT - Configuring: "+new_resource.name
   t = template node['nginx']['config']['file'] do
     if new_resource.template
@@ -18,6 +19,8 @@ action :configure do
       source node['nginx']['config']['template']
     end
     #variables({    })
+    cookbook new_resource.cookbook 
+    notifies :reload, "nginxssl[instance]", :immediately
   end
   new_resource.updated_by_last_action(t.updated_by_last_action?)
 end
@@ -39,3 +42,20 @@ action :reload do
   new_resource.updated_by_last_action(e.updated_by_last_action?)
 end
 
+action :install do
+  apt_repository "nginx" do
+    uri "http://ppa.launchpad.net/nginx/stable/ubuntu"
+    distribution node['lsb']['codename']
+    components ["main"]
+    keyserver "keyserver.ubuntu.com"
+    key "C300EE8C"
+  end
+
+  packages=["nginx","ssl-cert"]
+
+  packages.each do |pack|
+    package pack do
+      action :install
+    end
+  end
+end

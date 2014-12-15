@@ -15,7 +15,7 @@ attribute :cookbook,            :kind_of  => String, :default => "nginxssl"
 
 #file variables
 attribute :name,                :kind_of => String, :name_attribute => true 
-attribute :domain,              :kind_of => String, :default => "runtastic.com"
+attribute :domain,              :kind_of => String, :default => "example.com"
 attribute :subdomain,           :kind_of => String, :default => :name_attribute
 attribute :servername,          :kind_of => Array, :default => nil
 attribute :url,                 :kind_of => String, :default => nil
