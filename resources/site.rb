@@ -20,7 +20,7 @@ attribute :subdomain,           :kind_of => String, :default => :name_attribute
 attribute :servername,          :kind_of => Array, :default => nil
 attribute :url,                 :kind_of => String, :default => nil
 attribute :serveroptions,       :kind_of => Hash, :default => nil
-attribute :modifiers,           :kind_of => Hash, :default => nil
+attribute :modifiers,           :kind_of => Hash, :default => {}
 attribute :locations,           :kind_of => Hash, :default => nil
 #
 # unused at the moment
