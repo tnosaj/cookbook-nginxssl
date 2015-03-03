@@ -2,11 +2,11 @@
 # Do not modify this file by hand!
 server {
     listen 0.0.0.0:80;
-    server_name <%=@domain%>;
-    rewrite ^ http://www.runtastic.com$request_uri? permanent;
+    server_name <%=@name%>;
+    rewrite ^ http://<%=@subdomain%>.<%=@domain%>$request_uri? permanent;
 }
 server {
     listen 0.0.0.0:80;
-    server_name *.<%=@domain%>;
-    rewrite ^ http://www.runtastic.com$request_uri? permanent;
+    server_name *.<%=@name%>;
+    rewrite ^ http://<%=@subdomain%>.<%=@domain%>$request_uri? permanent;
 }

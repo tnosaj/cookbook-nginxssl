@@ -22,13 +22,10 @@ action :enable do
       :domain => new_resource.domain,
       :subdomain => new_resource.subdomain,
       :servername => new_resource.servername | tmpservername,
-      #:listenaddr => new_resource.listenaddr,
-      #:listenport => new_resource.listenport,
       :https => new_resource.https,
-      :url => new_resource.url,
       :locations => new_resource.locations,
       :modifiers => new_resource.modifiers,
-      :serveroptions =>  mergeOptions(node['nginx']['server']['default'], node['nginx']['server'][new_resource.name], new_resource.serveroptions)
+      :serveroptions =>  mergeOptions(node['nginx']['server']['default'], node['nginx']['server'][tmpservername], new_resource.serveroptions)
     })
     cookbook new_resource.cookbook
   end

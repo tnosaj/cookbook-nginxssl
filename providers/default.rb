@@ -11,14 +11,9 @@ end
 use_inline_resources
 action :configure do
   nginxssl "instance"
-  Chef::Log.info "JAT - Configuring: "+new_resource.name
+  Chef::Log.debug "nginx - Configuring: "+new_resource.name
   t = template node['nginx']['config']['file'] do
-    if new_resource.template
-      source new_resource.template
-    else
-      source node['nginx']['config']['template']
-    end
-    #variables({    })
+    source new_resource.template
     cookbook new_resource.cookbook 
     notifies :reload, "nginxssl[instance]", :immediately
   end
@@ -33,7 +28,7 @@ action :test do
 end
 
 action :reload do
-  Chef::Log.info "JAT - RELOADING: "+new_resource.name
+  Chef::Log.debug "nginx - RELOADING: "+new_resource.name
   service "nginx"
   e = execute "test-nginx-config" do
     command "nginx -t"

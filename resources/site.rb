@@ -16,12 +16,11 @@ attribute :cookbook,            :kind_of  => String, :default => "nginxssl"
 #file variables
 attribute :name,                :kind_of => String, :name_attribute => true 
 attribute :domain,              :kind_of => String, :default => "example.com"
-attribute :subdomain,           :kind_of => String, :default => :name_attribute
+attribute :subdomain,           :kind_of => String, :default => "www"
 attribute :servername,          :kind_of => Array, :default => nil
-attribute :url,                 :kind_of => String, :default => nil
 attribute :serveroptions,       :kind_of => Hash, :default => nil
 attribute :modifiers,           :kind_of => Hash, :default => {}
-attribute :locations,           :kind_of => Hash, :default => nil
+attribute :locations,           :kind_of => Hash, :default => {}
 #
 # unused at the moment
 #
