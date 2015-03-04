@@ -211,7 +211,6 @@ nginxssl_site "totally-not-example.com" do
   notifies :reload, "nginxssl[instance]"
 end
 ```
-```
 
 ### Contributors
 
